@@ -78,7 +78,3 @@ and curve.)
 To close the CANape connection, the exit() function is used: 
 
     canape.exit()
-
-# Code
-
-Where's the code? I can't show you. If you are interested in a Python interface for CANape, I've already done it once. http://www.linkedin.com/in/jed-frey.
