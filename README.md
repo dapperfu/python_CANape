@@ -11,9 +11,9 @@ Compatible with:
 Exposes all of CANape's features to the Python ecosystem.
 
 - Use [Jenkins'](https://jenkins.io) Python integration to do continuous integration of flash file builds and unit tests.
-- Embed CANape testing in [Jupyter Notebooks](http://jupyter.org) for data analysis.
-- Integrate CANape data with Deep Neural Nets such as [Tensorflow](https://www.tensorflow.org), [Keras](https://keras.io), [Theano](http://deeplearning.net/software/theano/)
-- Use [Pandas](http://pandas.pydata.org) to create [beautiful data visualizations](http://www.randalolson.com/2014/06/28/how-to-make-beautiful-data-visualizations-in-python-with-matplotlib/) of CANape data.
+- Embed CANape testing in [Jupyter Notebooks](http://jupyter.org) for [interactive exploratory data analysis](https://blog.dominodatalab.com/lesser-known-ways-of-using-notebooks/) or generating PDF Reports.
+- Integrate CANape data with Deep Neural Nets such as [Tensorflow](https://www.tensorflow.org), [Keras](https://keras.io), and [Theano](http://deeplearning.net/software/theano/).
+- Use the [Python Data Analysis Library ``pandas``](http://pandas.pydata.org) to create [beautiful data visualizations](http://www.randalolson.com/2014/06/28/how-to-make-beautiful-data-visualizations-in-python-with-matplotlib/) of CANape data.
 
 # Examples
 
