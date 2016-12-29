@@ -9,15 +9,11 @@ Compatible with:
 
 # Examples
 
-*(pseudo python)*
-
     import CANape
     canape = CANape.CANape()
     
-    # CANape can be initialized via the init(), init2(), init3(), init4(), or init5() functions. 
-    # Any one of these functions can be used to initialize CANape depending upon need.
-    # Each function requires a different set of parameters that need to be passed in. 
-    # If Asap3Init5 is being used, the function can be called like this: 
+CANape can be initialized via the init(), init2(), init3(), init4(), or init5() functions.  Any one of these functions can be used to initialize CANape depending upon need. Each function requires a different set of parameters that need to be passed in. If init5 is being used, the function can be called like this: 
+
     canape.init5(timeout = 20000,
                  m_WorkingDir = r"C:\Vector\Data\Experiment1",
                  fifo_size = 1000, 
@@ -25,17 +21,20 @@ Compatible with:
                  debug = True,
                  clear_device_list)
                  
-    # After initializing the ASAP3 connection, a new module/device has to be created and a database file has to be
-    # attached. If a connection is being made to a CCP device and an ASAP2 description file is available, 
-    # the AttachAsap2() function is used. 
+After initializing the ASAP3 connection, a new module/device has to be created and a database file has to be attached. If a connection is being made to a CCP device and an ASAP2 description file is available, the AttachAsap2() function is used. 
+
     canape.atttach_asap(a2l=r"C:\Vector\Data\Experiment1\TopSecret.a2l",
                         channel = 2);
                      
-    # To create a connection to a CAN device, the module has to be created like this: 
-    canape.Asap3CreateModule (Hdl, “CAN”, databaseFilename, driverType, channelNo, &Module); 
+To create a connection to a CAN device, the module can to be created like this: 
+
+    canape.create_module (name = "CAN", 
+                          database= r"C:\Vector\Data\Experiment1\TopSecret.dbc",,
+                          driverType=CANape(CCP, 
+                          channel = 1); 
     
-    
-    # To close the CANape connection, the exit() function is used: 
+To close the CANape connection, the exit() function is used: 
+
     canape.exit()
 
 # Code
