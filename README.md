@@ -12,6 +12,8 @@ Compatible with:
 
 Python is easier to train other engineers to use compared to the C interface in CANapeDLL or the WIN32 COM interface. Exposes all of CANape's features to the Python ecosystem. Write CANape scripts in Python rather than C.
 
+Use [Jenkins'](https://jenkins.io) Python integration to do continuous integration of flash file builds and unit tests.
+
 # Examples
 
     import CANape
