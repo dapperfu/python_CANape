@@ -50,8 +50,7 @@ To list all devices currently connected to CANape:
         print(device)
 
 Create a new module, add a measurement channel, record data, process it with numpy.
-
-    import numpy as np
+  
     canape.attach_asap(a2l=r"C:\Vector\Data\Experiment1\TopSecret.a2l",
                        channel = 2);
     canape.module[0].add_measurement(name='channel2',
@@ -63,7 +62,16 @@ Create a new module, add a measurement channel, record data, process it with num
         if np.magic(data):
             print("Eureka!")
             break
-        
+            
+Read and display calibration 2D Calibration Map. (Can return any calibration object data type like scalar, string, map
+and curve.)
+
+    data = canape.read_calibration_object(0, 'TopSecretCalibration', 1)
+    plt.plot(data[:,0], data[:,1])
+    plt.xlabel("Top Secret Dependent Axis")
+    plt.ylabel("Top Secret Independent Axis")
+    plt.title("Top Secret Calibration")
+    plt.show()
 
 To close the CANape connection, the exit() function is used: 
 
