@@ -10,6 +10,8 @@ setup(name='canape',
       author_email='canape@exstatic.org',
       license='BSD',
       packages=['canape'],
+      setup_requires=['pytest-runner'],
+      tests_require=['pytest'],
       zip_safe=False,
       classifiers=[
         'Development Status :: 4 - Beta',
