@@ -1,7 +1,9 @@
 from setuptools import setup
 
+__VERSION__ = '1.0.0'
+
 setup(name='canape',
-      version='1.0.0',
+      version=__VERSION__,
       description='Python CFFI for Vector CANape',
       url='https://github.com/jedediahfrey/PyCANape',
       author='Jed Frey',
