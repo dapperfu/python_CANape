@@ -15,6 +15,10 @@ Exposes all of CANape's features to the Python ecosystem.
 - Integrate CANape data with Deep Neural Nets such as [Tensorflow](https://www.tensorflow.org), [Keras](https://keras.io), and [Theano](http://deeplearning.net/software/theano/).
 - Use the [Python Data Analysis Library ``pandas``](http://pandas.pydata.org) to create [beautiful data visualizations](http://www.randalolson.com/2014/06/28/how-to-make-beautiful-data-visualizations-in-python-with-matplotlib/) of CANape data.
 
+# Installation
+
+    pip install -e git+https://github.com/jed-frey/PyCANape.git#egg=CANape
+
 # Examples
 
 Create CANape object.
