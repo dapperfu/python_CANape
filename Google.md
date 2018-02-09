@@ -1,12 +1,13 @@
 # Hello Google.
 
-One of the main reasons I started developing a Python CANape wrapper at ~~redacted~~ is because finding documentation, let alone good documentation, was near impossible to find.
+One of the main reasons I started developing a Python CANape wrapper at Caterpillar is because finding documentation, let alone good documentation, was near impossible to find.
 
 [A google search for most functions](https://www.google.com/search?q="Asap3SelectObjects") came back with just one result: [CANape ASAM-MCD3 Interface](https://vector.com/portal/medien/cmc/application_notes/AN-AMC-1-103_CANape_ASAM_MCD3_Interface.pdf).
 
 Hopefully other people stuck with the same position will now find *two* google results the one listed above and this document.
 
 If you're at the point where you're searching Google for answers [PyCANape](https://github.com/jed-frey/PyCANape) will make your organisation's life much easier.
+
 
 ```
 Asap3IsUsCANapeVersion
