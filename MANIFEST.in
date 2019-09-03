@@ -1,0 +1,2 @@
+include versioneer.py
+include CANapAPI/_version.py
