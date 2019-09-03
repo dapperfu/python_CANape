@@ -1,11 +1,8 @@
-import ctypes
-from .struct import version_t
-from .type import TAsap3Hdl
-from .defaults import CANapAPI_dll
 from .utilities import assign_dll_types
+from .structs import *
+from .defaults import CANapAPI_dll
 from cached_property import cached_property
 import os
-
 
 class CANapAPI(object):
     def __init__(
@@ -49,7 +46,7 @@ class CANapAPI(object):
 
     def Asap3GetVersion(self):
         version = version_t()
-        result = dll.Asap3GetVersion(ctypes.byref(version))
+        result = self.dll.Asap3GetVersion(ctypes.byref(version))
         if result:
             return version
         else:

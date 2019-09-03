@@ -85,15 +85,15 @@ def init_functions(dll):
 def exit_functions(dll):
     """Set argtipes and restype for dll exit functions."""
     # Asap3Exit
-    self.dll.Asap3Exit.argtypes = (TAsap3Hdl,)
-    self.dll.Asap3Exit.restype = ctypes.c_bool
+    dll.Asap3Exit.argtypes = (TAsap3Hdl,)
+    dll.Asap3Exit.restype = ctypes.c_bool
 
     # Asap3Exit2
-    self.dll.Asap3Exit2.argtypes = (
+    dll.Asap3Exit2.argtypes = (
         TAsap3Hdl,
         ctypes.c_bool,
     )
-    self.dll.Asap3Exit2.restype = ctypes.c_bool
+    dll.Asap3Exit2.restype = ctypes.c_bool
     return dll
 
 

@@ -2,7 +2,7 @@ import ctypes
 
 
 def generate_fancy_enum_factory(states, name):
-    class FancyEnum(ctypes.c_uint):
+    class FancyEnum(ctypes.c_int):
         def __init__(self, value):
             self.states = states
             assert value in self.states, Exception(

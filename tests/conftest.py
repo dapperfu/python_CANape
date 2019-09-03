@@ -2,6 +2,7 @@ import pytest
 import uuid
 import ctypes
 import os
+import CANapAPI.CANapAPI
 
 # Install CANape. Not included for copyright reasons.
 header_file = r"C:\Program Files\Vector CANape 17\CANapeAPI\CANapAPI.h"
@@ -34,3 +35,8 @@ def dll():
     yield dll
         
 
+@pytest.fixture(scope="function")
+def canapapi():
+    canapapi = CANapAPI.CANapAPI()
+    yield canapapi
+    canapapi.Asap3Exit2(True)
