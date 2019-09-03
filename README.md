@@ -1,11 +1,13 @@
 # PyCANape
+
+
 Pythonic CFFI wrapper for [CANape](https://vector.com/vi_canape_en.html). This is a full Pythonic wrapper using the [CANape ASAM-MCD3 Interface (CANapeAPI)](http://vector.com/portal/medien/cmc/application_notes/AN-AMC-1-103_CANape_ASAM_MCD3_Interface.pdf). It has an identical feature set to the [CANape® and MATLAB® interface.](http://vector.com/portal/medien/cmc/application_notes/AN-IMC-1-004_Interface_Programming_between_CANape_and_MATLAB.pdf)
 
 Compatible with:
 
-- Python 2.7-3.6+ x32 & 64-bit.
-- CANape 6.1-15.
-- Windows XP - 10.
+- Python 3.6+ 64-bit.
+- CANape 16 & 17.
+- Windows 10.
 
 # Why?
 Exposes all of CANape's features to the Python ecosystem.
@@ -15,9 +17,16 @@ Exposes all of CANape's features to the Python ecosystem.
 - Integrate CANape data with Deep Neural Nets such as [Tensorflow](https://www.tensorflow.org), [Keras](https://keras.io), and [Theano](http://deeplearning.net/software/theano/).
 - Use the [Python Data Analysis Library ``pandas``](http://pandas.pydata.org) to create [beautiful data visualizations](http://www.randalolson.com/2014/06/28/how-to-make-beautiful-data-visualizations-in-python-with-matplotlib/) of CANape data.
 
-# Installation
+## Motivation
 
-    pip install -e git+https://github.com/jed-frey/PyCANape.git#egg=CANape
+- Me: "So are you guys going to ever release a Python interface?"
+- Vector Sales Rep: "Everyone *loves* our COM interface? Is the COM interface not good enough? Why would anyone want to use Python when there is a COM interface? I can give you the e-mail address of an engineer if you need help with our COM interface."
+- Me: ![](shocked.png)
+
+
+## Old ReadMe
+
+
 
 # Examples
 
