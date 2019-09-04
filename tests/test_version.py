@@ -41,12 +41,19 @@ def test_canape_version(dll):
     print(f"CANapAPI version: {version}")
     
     
-def test_canape_version(canapapi):
-    version = canapapi.Asap3GetVersion()
+def test_canapapi_version(CANapAPI):
+    version = CANapAPI.Asap3GetVersion()
     assert version==version
     assert version=="2.3.1"
     assert version.osRelease==0
     assert version.osVersion==b'Windows95/WindowsNT'
     print(f"CANapAPI version: {version}")
 
- 
+
+def test_canapy_version(canapy):
+    version = canapy.version
+    assert version==version
+    assert version=="2.3.1"
+    assert version.osRelease==0
+    assert version.osVersion==b'Windows95/WindowsNT'
+    print(f"CANapAPI version: {version}")

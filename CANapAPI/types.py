@@ -8,16 +8,15 @@ UINT = ctypes.c_uint
 ULONG_PTR = ctypes.c_ulong
 DWORD_PTR = ULONG_PTR
 
-def byref(self):
-    return ctypes.byref(self)
-
 """ 'Special' types. """
 
+# Linchpin 
 class tAsap3Hdl(ctypes.Structure):
     def __repr__(self):
         return "tAsap3Hdl<>"
-
+ 
 TAsap3Hdl = ctypes.POINTER(tAsap3Hdl)
+#TODO: Figure out how to extend ctypes types.
 setattr(TAsap3Hdl, "__repr__", lambda self: f"TAsap3Hdl<>")
 setattr(TAsap3Hdl, "byref", property(lambda self: ctypes.byref(self)))
 

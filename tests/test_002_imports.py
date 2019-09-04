@@ -11,3 +11,7 @@ def test_structs():
 def test_CANapAPI():
     import CANapAPI
     import CANapAPI.CANapAPI
+    
+def test_canapy():
+    import canapy
+    from canapy import canapy

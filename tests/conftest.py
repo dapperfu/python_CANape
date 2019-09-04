@@ -2,7 +2,8 @@ import pytest
 import uuid
 import ctypes
 import os
-import CANapAPI.CANapAPI
+from CANapAPI import CANapAPI as CANapAPI_
+from canapy import canapy as canapy_
 
 # Install CANape. Not included for copyright reasons.
 header_file = r"C:\Program Files\Vector CANape 17\CANapeAPI\CANapAPI.h"
@@ -34,9 +35,20 @@ def dll():
     dll = ctypes.windll.LoadLibrary(CANapAPI_dll)
     yield dll
         
+@pytest.fixture(scope="function")
+def CANapAPI():
+    CANapAPI = CANapAPI_()
+    yield CANapAPI
+    CANapAPI.Asap3Exit2(True)
+    
+@pytest.fixture(scope="function")
+def canapy():
+    canapy = canapy_()
+    yield canapy
+    canapy.exit(True)
 
 @pytest.fixture(scope="function")
-def canapapi():
-    canapapi = CANapAPI.CANapAPI()
-    yield canapapi
-    canapapi.Asap3Exit2(True)
+def canape():
+    workingDir = os.path.abspath(r"C:\Users\Public\Documents\Vector CANape 17\Examples\XCPDemo")
+    with canapy_(workingDir=workingDir) as canape:
+        yield canape

@@ -101,6 +101,9 @@ def assign_dll_types(dll):
     """Set argtipes and restype for dll functions."""
     dll = init_functions(dll)
     dll = exit_functions(dll)
+    
+    dll.Asap3GetVersion.argtypes = (ctypes.POINTER(version_t),)
+    dll.Asap3GetVersion.restype = ctypes.c_bool
 
     # Asap3SetInteractiveMode
     dll.Asap3SetInteractiveMode.argtypes = (
@@ -116,4 +119,8 @@ def assign_dll_types(dll):
     )
     dll.Asap3GetInteractiveMode.restype = ctypes.c_bool
 
+    
+    # Asap3GetProjectDirectory
+    dll.Asap3GetProjectDirectory.argtypes=(TAsap3Hdl, ctypes.POINTER(type(ctypes.create_string_buffer(b"", 255))), ctypes.POINTER(ctypes.c_ulong))
+    dll.Asap3GetProjectDirectory.restype=ctypes.c_bool
     return dll

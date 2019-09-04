@@ -51,6 +51,20 @@ class CANapAPI(object):
             return version
         else:
             return None
+        
+    def Asap3GetProjectDirectory(self):
+        directory = ctypes.create_string_buffer(b"", 255)
+        directory_p = ctypes.POINTER(type(directory))
+        size = ctypes.c_ulong()
+        result = dll.Asap3GetProjectDirectory(
+            hdl,
+            ctypes.byref(directory),
+            ctypes.pointer(size),
+        )
+        if result:
+            return os.path.abspath(directory.value.decode("UTF-8"))
+        else:
+            return None
 
     def Asap3Init5(
         self,
