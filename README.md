@@ -21,10 +21,8 @@ Exposes all of CANape's features to the Python ecosystem.
 
 - Me: "So are you guys going to ever release a Python interface?"
 - Vector Sales Rep: "Everyone *loves* our COM interface? Is the COM interface not good enough? Why would anyone want to use Python when there is a COM interface? I can give you the e-mail address of an engineer if you need help with our COM interface."
-- Me: ![](shocked.png)
-
-
-## Old ReadMe
+- Me:
+  ![Shocked Pikachu](shocked.png)
 
 
 
