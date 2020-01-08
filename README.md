@@ -33,32 +33,32 @@ Create CANape object.
     import CANape
     canape = CANape.CANape()
 
-CANape can be initialized via the init(), init2(), init3(), init4(), or init5() functions.  Any one of these functions can be used to initialize CANape depending upon need. Each function requires a different set of parameters that need to be passed in. If init5 is being used, the function can be called like this: 
+CANape can be initialized via the init(), init2(), init3(), init4(), or init5() functions.  Any one of these functions can be used to initialize CANape depending upon need. Each function requires a different set of parameters that need to be passed in. If init5 is being used, the function can be called like this:
 
     canape.init5(timeout = 20000,
                  m_WorkingDir = r"C:\Vector\Data\Experiment1",
-                 fifo_size = 1000, 
+                 fifo_size = 1000,
                  sample_size = 1,
                  debug = True,
                  clear_device_list)
 
-After initializing the ASAP3 connection, a new module/device has to be created and a database file has to be attached. If a connection is being made to a CCP device and an ASAP2 description file is available, the AttachAsap2() function is used. 
+After initializing the ASAP3 connection, a new module/device has to be created and a database file has to be attached. If a connection is being made to a CCP device and an ASAP2 description file is available, the AttachAsap2() function is used.
 
     canape.attach_asap(a2l=r"C:\Vector\Data\Experiment1\TopSecret.a2l",
                         channel = 2);
 
-To create a connection to a CAN device, the module can to be created like this: 
+To create a connection to a CAN device, the module can to be created like this:
 
-    canape.create_module (name = "CAN", 
+    canape.create_module (name = "CAN",
                           database= r"C:\Vector\Data\Experiment1\TopSecret.dbc",,
-                          driverType=CANape(CCP, 
+                          driverType=CANape(CCP,
                           channel = 1);
-    
-To use a MDF file in Python or Matlab. 
+
+To use a MDF file in Python or Matlab.
 
     canape.matlab_conversion(mdf = r"C:\Vector\Data\Experiment1\NDA_Data.mdf",
                              mat = r"C:\Vector\Data\Experiment1\NDA_Data.mat)
-                            
+
 To list all devices currently connected to CANape:
 
     devices = canape.get_devices()
@@ -78,7 +78,7 @@ Create a new module, add a measurement channel, record data, process it with num
         if np.magic(data):
             print("Eureka!")
             break
-            
+
 Read and display calibration 2D Calibration Map. (Can return any calibration object data type like scalar, string, map
 and curve.)
 
@@ -89,6 +89,6 @@ and curve.)
     plt.title("Top Secret Calibration")
     plt.show()
 
-To close the CANape connection, the exit() function is used: 
+To close the CANape connection, the exit() function is used:
 
     canape.exit()

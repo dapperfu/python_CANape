@@ -1,28 +1,18 @@
-__VERSION__ = "1.0.0"
+from ._version import get_versions
 
-class CANape(object):
-    """Placeholder.
-    
-    Due to NDA contracts that I signed the actual original implementation belongs to and remains at Caterpillar, Inc.
-    
-    However I've done it once and re-creating it would be trivial. If your company wants a much better high level API
-    to control CANape, my contact information is below.
-    """
-    
+__version__ = get_versions()["version"]
+del get_versions
+
+
+class CANape:
     def __init__(self):
         pass
-    
-    def init(self):
-        raise NotImplementedError("http://www.linkedin.com/in/jed-frey")
-        
-    def init2(self):
-        raise NotImplementedError("http://www.linkedin.com/in/jed-frey")
-        
-    def init3(self):
-        raise NotImplementedError("http://www.linkedin.com/in/jed-frey")
-        
-    def init4(self):
-        raise NotImplementedError("http://www.linkedin.com/in/jed-frey")
-        
-    def init5(self):
-        raise NotImplementedError("http://www.linkedin.com/in/jed-frey")
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, exc_traceback):
+        if exc_type:
+            print(f"exc_type: {exc_type}")
+            print(f"exc_value: {exc_value}")
+            print(f"exc_traceback: {exc_traceback}")
