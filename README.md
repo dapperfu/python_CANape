@@ -1,30 +1,28 @@
+# Da Liegt der Hund beraben.
+
+## Entwicklungsgeschichte
+
+Unternehmen, die CANape (einschließlich Vector) verwenden, sind mit Open Source sehr konservativ.
+
+Bei Caterpillar (ca. 2015-2016) wurde eine Alpha-Version entwickelt. Es war gut. Es automatisierte Stunden des dSpace HIL-Testens! Es befindet sich in der Firewall von Caterpillar.
+
+Bei Eaton (ca. 2017) wurde eine Beta-Version entwickelt. Es war gut gut. Es befindet sich in der Firewall von Eaton.
+
+Code hier wurde mit der Demo-Version von Vector entwickelt. Es hat Einschränkungen. Ich kann mir keine Vector-Hardware leisten.
+
+## Zukunft
+
+Python ist die Zukunft. ADAS5 benötigt viele Tests. Python ist gut in Tests. CANape braucht Python.
+
+- Vector könnte dies entwickeln. Hören Sie auf Ingenieure, nicht auf Management. Niemand mag COM.
+- Jemand spendet eine CANape-Lizenz für die Entwicklung.
+- Jemand gabelt und setzt diese Arbeit fort.
+
+
 # PyCANape
 
 
 Pythonic CFFI wrapper for [CANape](https://vector.com/vi_canape_en.html). This is a full Pythonic wrapper using the [CANape ASAM-MCD3 Interface (CANapeAPI)](http://vector.com/portal/medien/cmc/application_notes/AN-AMC-1-103_CANape_ASAM_MCD3_Interface.pdf). It has an identical feature set to the [CANape® and MATLAB® interface.](http://vector.com/portal/medien/cmc/application_notes/AN-IMC-1-004_Interface_Programming_between_CANape_and_MATLAB.pdf)
-
-Compatible with:
-
-- Python 3.6+ 64-bit.
-- CANape 16 & 17.
-- Windows 10.
-
-# Why?
-Exposes all of CANape's features to the Python ecosystem.
-
-- Use [Jenkins'](https://jenkins.io) Python integration to do continuous integration of flash file builds and unit tests.
-- Embed CANape testing in [Jupyter Notebooks](http://jupyter.org) for [interactive exploratory data analysis](https://blog.dominodatalab.com/lesser-known-ways-of-using-notebooks/) or generating PDF Reports.
-- Integrate CANape data with Deep Neural Nets such as [Tensorflow](https://www.tensorflow.org), [Keras](https://keras.io), and [Theano](http://deeplearning.net/software/theano/).
-- Use the [Python Data Analysis Library ``pandas``](http://pandas.pydata.org) to create [beautiful data visualizations](http://www.randalolson.com/2014/06/28/how-to-make-beautiful-data-visualizations-in-python-with-matplotlib/) of CANape data.
-
-## Motivation
-
-- Me: "So are you guys going to ever release a Python interface?"
-- Vector Sales Rep: "Everyone *loves* our COM interface? Is the COM interface not good enough? Why would anyone want to use Python when there is a COM interface? I can give you the e-mail address of an engineer if you need help with our COM interface."
-- Me:
-  ![Shocked Pikachu](shocked.png)
-
-
 
 # Examples
 
@@ -92,3 +90,20 @@ and curve.)
 To close the CANape connection, the exit() function is used:
 
     canape.exit()
+
+
+# Why?
+Exposes all of CANape's features to the Python ecosystem.
+
+- Use [Jenkins'](https://jenkins.io) Python integration to do continuous integration of flash file builds and unit tests.
+- Embed CANape testing in [Jupyter Notebooks](http://jupyter.org) for [interactive exploratory data analysis](https://blog.dominodatalab.com/lesser-known-ways-of-using-notebooks/) or generating PDF Reports.
+- Integrate CANape data with Deep Neural Nets such as [Tensorflow](https://www.tensorflow.org), [Keras](https://keras.io), and [Theano](http://deeplearning.net/software/theano/).
+- Use the [Python Data Analysis Library ``pandas``](http://pandas.pydata.org) to create [beautiful data visualizations](http://www.randalolson.com/2014/06/28/how-to-make-beautiful-data-visualizations-in-python-with-matplotlib/) of CANape data.
+
+
+### Motivation
+
+- Me: "So are you guys going to ever release a Python interface?"
+- Vector Sales Rep: "Everyone *loves* our COM interface? Is the COM interface not good enough? Why would anyone want to use Python when there is a COM interface? I can give you the e-mail address of an engineer if you need help with our COM interface."
+- Me:
+  ![Shocked Pikachu](shocked.png)
