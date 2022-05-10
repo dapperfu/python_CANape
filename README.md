@@ -1,4 +1,4 @@
-# Da Liegt der Hund beraben.
+# Da Liegt der Hund beraben
 
 ## Entwicklungsgeschichte
 
