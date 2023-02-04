@@ -1,3 +1,9 @@
+# Feb 2023 Update. 
+
+If you want a working Python CANape tool check out [pycanape](https://github.com/zariiii9003/pycanape) by zariiii9003.
+
+This project was a light proof of concept for my resume and to hopefully inspire others to show it's possible. It started as an unsupported side project at Eaton and Caterpillar. The bits on Github had to be re-created without a licensed version of CANape and therefore is very light.
+
 # Da Liegt der Hund beraben
 
 ## Entwicklungsgeschichte
