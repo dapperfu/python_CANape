@@ -1,4 +1,8 @@
-"""File Conversion module.
+"""Converter Module.
 
-This module provides functionality for converting MDF files to other formats.
+This module provides functions for MDF file conversion.
 """
+
+from .mdf import MDFConverter
+
+__all__ = ["MDFConverter"]

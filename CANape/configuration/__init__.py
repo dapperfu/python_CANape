@@ -1,4 +1,8 @@
-"""Configuration Functions module.
+"""Configuration Module.
 
-This module provides functionality for loading and managing CANape project configuration.
+This module provides functions for loading CNA files and managing project parameters.
 """
+
+from .project import ProjectConfiguration
+
+__all__ = ["ProjectConfiguration"]

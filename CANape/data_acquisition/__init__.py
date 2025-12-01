@@ -1,4 +1,16 @@
-"""Data Acquisition module.
+"""Data Acquisition Module.
 
-This module provides functionality for setting up, controlling, and reading measurement data.
+This module provides functions for data acquisition setup, control, reading, and recorder management.
 """
+
+from .control import DataAcquisitionControl
+from .reading import DataAcquisitionReading
+from .recorder import RecorderManagement
+from .setup import DataAcquisitionSetup
+
+__all__ = [
+    "DataAcquisitionSetup",
+    "DataAcquisitionControl",
+    "DataAcquisitionReading",
+    "RecorderManagement",
+]

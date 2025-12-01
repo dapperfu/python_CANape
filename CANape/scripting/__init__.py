@@ -1,4 +1,8 @@
-"""Scripting Functions module.
+"""Scripting Module.
 
-This module provides functionality for executing and managing CANape scripts.
+This module provides functions for executing and managing CANape scripts.
 """
+
+from .execution import ScriptExecution
+
+__all__ = ["ScriptExecution"]
