@@ -2,6 +2,7 @@ from .utilities import assign_dll_types
 from .structs import *
 from .defaults import CANapAPI_dll
 from cached_property import cached_property
+import ctypes
 import os
 
 class CANapAPI(object):
@@ -33,6 +34,7 @@ class CANapAPI(object):
         result = self.dll.Asap3SetInteractiveMode(
             self.handle, c_interactive_mode
         )
+        return result
 
     def Asap3GetInteractiveMode(self):
         interactive_mode = ctypes.c_bool()
@@ -56,10 +58,10 @@ class CANapAPI(object):
         directory = ctypes.create_string_buffer(b"", 255)
         directory_p = ctypes.POINTER(type(directory))
         size = ctypes.c_ulong()
-        result = dll.Asap3GetProjectDirectory(
-            hdl,
+        result = self.dll.Asap3GetProjectDirectory(
+            self.handle,
             ctypes.byref(directory),
-            ctypes.pointer(size),
+            ctypes.byref(size),
         )
         if result:
             return os.path.abspath(directory.value.decode("UTF-8"))
