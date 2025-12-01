@@ -4,6 +4,19 @@ If you want a working Python CANape tool check out [pycanape](https://github.com
 
 This project was a light proof of concept for my resume and to hopefully inspire others to show it's possible. It started as an unsupported side project at Eaton and Caterpillar. The bits on Github had to be re-created without a licensed version of CANape and therefore is very light.
 
+# 2025 Update - High-Level Pythonic Interface
+
+This project has been significantly enhanced with a comprehensive high-level Pythonic interface that wraps all common CANape ASAP3 functions. The new interface provides:
+
+- **Clean Pythonic naming** - Removed "Asap3" prefix from all high-level methods
+- **Automatic error decoding** - DLL error codes are converted to readable Pythonic error messages
+- **Decorator-based patterns** - Common operations use Python decorators for validation, error handling, and retry logic
+- **Dual access patterns** - Both high-level (Pythonic) and low-level (direct DLL) interfaces are available
+- **Context manager support** - Automatic cleanup with `with` statements
+- **Complete examples** - See `Examples/` directory for low-level, high-level, and side-by-side comparison examples
+
+The high-level interface makes CANape automation much more accessible while still providing full access to the low-level DLL functions when needed.
+
 # Da Liegt der Hund beraben
 
 ## Entwicklungsgeschichte
@@ -24,6 +37,10 @@ Python ist die Zukunft. ADAS5 benötigt viele Tests. Python ist gut in Tests. CA
 - Jemand spendet eine CANape-Lizenz für die Entwicklung.
 - Jemand gabelt und setzt diese Arbeit fort.
 
+## Die Auferstehung des Hundes (2025)
+
+Der Hund wurde von den Toten auferweckt mit Vibe Coding, um weiter an diesem Projekt zu arbeiten. Die Arbeit an der hochwertigen Pythonic-Schnittstelle wurde abgeschlossen, aber wir warten noch auf eine CANape-Maschine zum Testen. Sobald wir Zugang zu einer CANape-Installation haben, werden wir die Implementierung vollständig validieren und testen.
+
 
 # PyCANape
 
@@ -32,70 +49,91 @@ Pythonic CFFI wrapper for [CANape](https://vector.com/vi_canape_en.html). This i
 
 # Examples
 
-Create CANape object.
+## High-Level Pythonic Interface (Recommended)
 
-    import CANape
-    canape = CANape.CANape()
+The new high-level interface provides clean, Pythonic method names with automatic error handling:
 
-CANape can be initialized via the init(), init2(), init3(), init4(), or init5() functions.  Any one of these functions can be used to initialize CANape depending upon need. Each function requires a different set of parameters that need to be passed in. If init5 is being used, the function can be called like this:
+    from CANape import CANape
 
-    canape.init5(timeout = 20000,
-                 m_WorkingDir = r"C:\Vector\Data\Experiment1",
-                 fifo_size = 1000,
-                 sample_size = 1,
-                 debug = True,
-                 clear_device_list)
+    # Use context manager for automatic cleanup
+    with CANape() as canape:
+        # Start CANape (clean method name, no "Asap3" prefix)
+        canape.start(
+            response_timeout=10000,
+            working_dir="./canape_tmp",
+            fifo_size=8192,
+            debug_mode=True
+        )
+        
+        # Create module (Pythonic interface)
+        module = canape.module.create(
+            module_name="MyModule",
+            database_filename="database.a2l",
+            driver_type=1,  # ASAP3_DRIVER_CCP
+            channel_no=1
+        )
+        
+        # Add measurement channel
+        canape.data_acquisition.add_channel(
+            module=module,
+            measurement_object_name="EngineSpeed"
+        )
+        
+        # Start data acquisition
+        canape.data_acquisition.start()
+        
+        # Read calibration object
+        value = canape.calibration.read(
+            module=module,
+            object_name="MyCalibrationObject"
+        )
+        
+        # Execute diagnostic job
+        response = canape.diagnostic.execute_job(
+            module=module,
+            job_name="ReadDTCs"
+        )
+        
+        # Stop acquisition
+        canape.data_acquisition.stop()
+        # Context manager automatically calls stop() on exit
 
-After initializing the ASAP3 connection, a new module/device has to be created and a database file has to be attached. If a connection is being made to a CCP device and an ASAP2 description file is available, the AttachAsap2() function is used.
+## Low-Level Direct DLL Access
 
-    canape.attach_asap(a2l=r"C:\Vector\Data\Experiment1\TopSecret.a2l",
-                        channel = 2);
+For full control, you can still access the low-level DLL functions directly:
 
-To create a connection to a CAN device, the module can to be created like this:
+    from CANape import CANape
 
-    canape.create_module (name = "CAN",
-                          database= r"C:\Vector\Data\Experiment1\TopSecret.dbc",,
-                          driverType=CANape(CCP,
-                          channel = 1);
+    canape = CANape()
+    
+    # Direct DLL function calls
+    canape.init.Asap3Init(
+        response_timeout=10000,
+        working_dir="./canape_tmp",
+        fifo_size=8192,
+        debug_mode=True
+    )
+    
+    # Direct module creation
+    module = canape.module.create.Asap3CreateModule(
+        module_name="MyModule",
+        database_filename="database.a2l",
+        driver_type=1,
+        channel_no=1
+    )
+    
+    # Manual error handling
+    if not canape.data_acquisition.control.Asap3StartDataAcquisition():
+        error_code = canape.error.Asap3GetLastError()
+        error_text = canape.error.Asap3ErrorText(error_code)
+        print(f"Error: {error_text} (code: {error_code})")
+    
+    canape.init.Asap3Exit()
 
-To use a MDF file in Python or Matlab.
-
-    canape.matlab_conversion(mdf = r"C:\Vector\Data\Experiment1\NDA_Data.mdf",
-                             mat = r"C:\Vector\Data\Experiment1\NDA_Data.mat)
-
-To list all devices currently connected to CANape:
-
-    devices = canape.get_devices()
-    for device in devices:
-        print(device)
-
-Create a new module, add a measurement channel, record data, process it with numpy.
-
-    canape.attach_asap(a2l=r"C:\Vector\Data\Experiment1\TopSecret.a2l",
-                       channel = 2);
-    canape.module[0].add_measurement(name='channel2',
-                                     task_index =3,
-                                     save=0)
-    canape.start_measurement()
-    while True:
-        data = canape.get_fifo_data(0, 2)
-        if np.magic(data):
-            print("Eureka!")
-            break
-
-Read and display calibration 2D Calibration Map. (Can return any calibration object data type like scalar, string, map
-and curve.)
-
-    data = canape.read_calibration_object(0, 'TopSecretCalibration', 1)
-    plt.plot(data[:,0], data[:,1])
-    plt.xlabel("Top Secret Dependent Axis")
-    plt.ylabel("Top Secret Independent Axis")
-    plt.title("Top Secret Calibration")
-    plt.show()
-
-To close the CANape connection, the exit() function is used:
-
-    canape.exit()
+See the `Examples/` directory for complete working examples:
+- `02_Low_Level_API.py` - Direct DLL function calls
+- `03_High_Level_API.py` - Pythonic interface
+- `04_Complete_Workflow.py` - Side-by-side comparison
 
 
 # Why?

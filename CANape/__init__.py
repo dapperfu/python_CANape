@@ -4,14 +4,27 @@ This module provides a unified, high-level Python interface to the Vector CANape
 ASAP3 API. It wraps the low-level C API functions and provides a clean, Pythonic
 interface with proper error handling, type hints, and documentation.
 
-Example
--------
+Example (High-Level Pythonic Interface)
+----------------------------------------
     >>> from CANape import CANape
-    >>> canape = CANape(dll_path="path/to/CANapAPI64.dll")
-    >>> canape.init(response_timeout=10000, working_dir="./canape_tmp")
-    >>> module = canape.module.create("MyModule", "database.a2l", driver_type=1, channel_no=1)
-    >>> value = canape.calibration.read(module, "MyCalibrationObject")
-    >>> canape.exit()
+    >>> with CANape() as canape:
+    ...     canape.start()
+    ...     module = canape.module.create("MyModule", "database.a2l", driver_type=1, channel_no=1)
+    ...     canape.data_acquisition.add_channel(module, "EngineSpeed")
+    ...     canape.data_acquisition.start()
+    ...     values = canape.data_acquisition.read()
+    ...     canape.diagnostic.execute_job(module, "ReadDTCs")
+    ...     value = canape.calibration.read(module, "MyCalibrationObject")
+
+Example (Low-Level Direct DLL Access)
+-------------------------------------
+    >>> from CANape import CANape
+    >>> canape = CANape()
+    >>> canape.init.Asap3Init(response_timeout=10000, working_dir="./canape_tmp")
+    >>> module = canape.module.create.Asap3CreateModule(
+    ...     "MyModule", "database.a2l", driver_type=1, channel_no=1
+    ... )
+    >>> canape.init.Asap3Exit()
 """
 
 from typing import Any, Optional
@@ -19,24 +32,21 @@ from typing import Any, Optional
 # Import all sub-modules
 from .asap3 import error_handling, initialization, project, version
 from .calibration import address_access, object_info, read_write
-from .callbacks import events as callbacks_events
-from .configuration import project as config_project
-from .converter import mdf as converter_mdf
+from .calibration import HighLevelCalibrationInterface
+from .core.decorators import handle_errors, requires_initialization
 from .core.dll_loader import load_dll
 from .core.handle import Handle
 from .core.type_assignments import assign_basic_dll_types
 from .data_acquisition import (
-    control as daq_control,
-    reading as daq_reading,
-    recorder as daq_recorder,
-    setup as daq_setup,
+    control,
+    reading,
+    recorder,
+    setup,
 )
-from .diagnostic import jobs as diag_jobs, requests as diag_requests, responses as diag_responses
-from .flash import management as flash_mgmt
-from .misc import utilities as misc_utils
+from .data_acquisition import HighLevelDataAcquisitionInterface
+from .diagnostic import HighLevelDiagnosticInterface
 from .module import creation, database, management
-from .network import management as network_mgmt
-from .scripting import execution as script_exec
+from .module import HighLevelModuleInterface
 
 __all__ = ["CANape"]
 
@@ -44,8 +54,8 @@ __all__ = ["CANape"]
 class CANape:
     """Unified CANape API interface.
 
-    This class provides a high-level interface to all CANape functionality,
-    organized into logical sub-modules.
+    This class provides both high-level Pythonic and low-level direct DLL access
+    to all CANape functionality, organized into logical sub-modules.
 
     Parameters
     ----------
@@ -55,21 +65,25 @@ class CANape:
     Attributes
     ----------
     dll : Any
-        The loaded CANape DLL object.
+        The loaded CANape DLL object (for direct DLL access).
     handle : Handle
         The CANape handle object.
     init : ASAP3Initialization
-        Initialization functions.
+        Low-level initialization functions (direct DLL access).
     version : ASAP3Version
         Version information functions.
     error : ASAP3ErrorHandling
         Error handling functions.
     project : ASAP3Project
         Project management functions.
-    module : ModuleInterface
-        Module management interface.
-    calibration : CalibrationInterface
-        Calibration interface.
+    module : HighLevelModuleInterface
+        High-level module management interface (Pythonic).
+    calibration : HighLevelCalibrationInterface
+        High-level calibration interface (Pythonic).
+    data_acquisition : HighLevelDataAcquisitionInterface
+        High-level data acquisition interface (Pythonic).
+    diagnostic : HighLevelDiagnosticInterface
+        High-level diagnostic interface (Pythonic).
     """
 
     def __init__(self, dll_path: Optional[str] = None) -> None:
@@ -87,46 +101,98 @@ class CANape:
         # Create handle
         self.handle = Handle()
 
-        # Initialize sub-modules
+        # Initialize low-level sub-modules (for direct DLL access)
         self.init = initialization.ASAP3Initialization(self.dll, self.handle)
         self.version = version.ASAP3Version(self.dll, self.handle)
         self.error = error_handling.ASAP3ErrorHandling(self.dll, self.handle)
         self.project = project.ASAP3Project(self.dll, self.handle)
 
-        # Module interface
-        self.module = ModuleInterface(self.dll, self.handle)
+        # Initialize high-level interfaces (Pythonic)
+        self.module = HighLevelModuleInterface(self.dll, self.handle)
+        self.calibration = HighLevelCalibrationInterface(self.dll, self.handle)
+        self.data_acquisition = HighLevelDataAcquisitionInterface(self.dll, self.handle)
+        self.diagnostic = HighLevelDiagnosticInterface(self.dll, self.handle)
 
-        # Calibration interface
-        self.calibration = CalibrationInterface(self.dll, self.handle)
+    @handle_errors("start CANape")
+    def start(
+        self,
+        response_timeout: int = 10000,
+        working_dir: str = "canape_tmp",
+        fifo_size: int = 8192,
+        debug_mode: bool = True,
+    ) -> bool:
+        """Start/initialize CANape connection.
 
-        # Data acquisition interface
-        self.data_acquisition = DataAcquisitionInterface(self.dll, self.handle)
+        Pythonic wrapper around Asap3Init. Removes "Asap3" prefix.
 
-        # Converter interface
-        self.converter = converter_mdf.MDFConverter(self.dll, self.handle)
+        Parameters
+        ----------
+        response_timeout : int, optional
+            Maximum response time in milliseconds, by default 10000.
+        working_dir : str, optional
+            Sets CANape working directory, by default "canape_tmp".
+        fifo_size : int, optional
+            Total size of FIFO used for data acquisition, by default 8192.
+        debug_mode : bool, optional
+            If True, call CANape in 'normal' screen size, by default True.
 
-        # Diagnostic interface
-        self.diagnostic = DiagnosticInterface(self.dll, self.handle)
+        Returns
+        -------
+        bool
+            True if successful.
 
-        # Scripting interface
-        self.scripting = script_exec.ScriptExecution(self.dll, self.handle)
-
-        # Flash interface
-        self.flash = flash_mgmt.FlashManagement(self.dll, self.handle)
-
-        # Network interface
-        self.network = network_mgmt.NetworkManagement(self.dll, self.handle)
-
-        # Configuration interface
-        self.configuration = config_project.ProjectConfiguration(
-            self.dll, self.handle
+        Examples
+        --------
+        >>> canape = CANape()
+        >>> canape.start()
+        """
+        return self.init.Asap3Init(
+            response_timeout=response_timeout,
+            working_dir=working_dir,
+            fifo_size=fifo_size,
+            debug_mode=debug_mode,
         )
 
-        # Callbacks interface
-        self.callbacks = callbacks_events.CallbackEvents(self.dll, self.handle)
+    connect = start  # Alias for better naming
 
-        # Utilities interface
-        self.misc = misc_utils.Utilities(self.dll, self.handle)
+    @requires_initialization
+    @handle_errors("stop CANape")
+    def stop(self) -> bool:
+        """Stop/disconnect from CANape.
+
+        Pythonic wrapper around Asap3Exit. Removes "Asap3" prefix.
+
+        Returns
+        -------
+        bool
+            True if successful.
+
+        Examples
+        --------
+        >>> canape.stop()
+        """
+        return self.init.Asap3Exit()
+
+    disconnect = stop  # Alias for better naming
+    exit = stop  # Alias for compatibility
+
+    @property
+    def project_directory(self) -> Optional[str]:
+        """Get current project directory.
+
+        Returns
+        -------
+        Optional[str]
+            Current project directory as absolute path, or None if failed.
+
+        Examples
+        --------
+        >>> dir_path = canape.project_directory
+        """
+        try:
+            return self.project.Asap3GetProjectDirectory()
+        except Exception:
+            return None
 
     def __enter__(self) -> "CANape":
         """Context manager entry."""
@@ -136,15 +202,17 @@ class CANape:
         """Context manager exit - automatically calls exit if initialized."""
         if self.handle.valid:
             try:
-                self.init.Asap3Exit()
+                self.stop()
             except Exception:
                 pass
 
 
+# Keep low-level interfaces for backward compatibility and direct DLL access
 class ModuleInterface:
-    """Module management interface.
+    """Low-level module management interface (for direct DLL access).
 
-    Provides access to module creation, management, and database functions.
+    Provides direct access to module creation, management, and database functions.
+    Use the high-level `module` attribute for Pythonic interface.
     """
 
     def __init__(self, dll: Any, handle: Handle) -> None:
@@ -163,9 +231,10 @@ class ModuleInterface:
 
 
 class CalibrationInterface:
-    """Calibration interface.
+    """Low-level calibration interface (for direct DLL access).
 
-    Provides access to calibration read/write, address access, and object info functions.
+    Provides direct access to calibration read/write, address access, and object info functions.
+    Use the high-level `calibration` attribute for Pythonic interface.
     """
 
     def __init__(self, dll: Any, handle: Handle) -> None:
@@ -184,9 +253,10 @@ class CalibrationInterface:
 
 
 class DataAcquisitionInterface:
-    """Data Acquisition interface.
+    """Low-level data acquisition interface (for direct DLL access).
 
-    Provides access to data acquisition setup, control, reading, and recorder functions.
+    Provides direct access to data acquisition setup, control, reading, and recorder functions.
+    Use the high-level `data_acquisition` attribute for Pythonic interface.
     """
 
     def __init__(self, dll: Any, handle: Handle) -> None:
@@ -199,28 +269,7 @@ class DataAcquisitionInterface:
         handle : Handle
             The CANape handle.
         """
-        self.setup = daq_setup.DataAcquisitionSetup(dll, handle)
-        self.control = daq_control.DataAcquisitionControl(dll, handle)
-        self.reading = daq_reading.DataAcquisitionReading(dll, handle)
-        self.recorder = daq_recorder.RecorderManagement(dll, handle)
-
-
-class DiagnosticInterface:
-    """Diagnostic interface.
-
-    Provides access to diagnostic job execution, request creation, and response retrieval.
-    """
-
-    def __init__(self, dll: Any, handle: Handle) -> None:
-        """Initialize diagnostic interface.
-
-        Parameters
-        ----------
-        dll : Any
-            The loaded DLL object.
-        handle : Handle
-            The CANape handle.
-        """
-        self.jobs = diag_jobs.DiagnosticJobs(dll, handle)
-        self.requests = diag_requests.DiagnosticRequests(dll, handle)
-        self.responses = diag_responses.DiagnosticResponses(dll, handle)
+        self.setup = setup.DataAcquisitionSetup(dll, handle)
+        self.control = control.DataAcquisitionControl(dll, handle)
+        self.reading = reading.DataAcquisitionReading(dll, handle)
+        self.recorder = recorder.RecorderManagement(dll, handle)
