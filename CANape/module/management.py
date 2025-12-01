@@ -7,7 +7,6 @@ resume mode, and other module operations.
 import ctypes
 from typing import Any, Optional
 
-from ..core.enums import e_RamMode, tDriverType
 from ..core.exceptions import CANapeModuleError
 from ..core.handle import Handle
 from ..core.types import TModulHdl
@@ -161,9 +160,7 @@ class ModuleManagement:
                 TModulHdl,
                 ctypes.POINTER(ctypes.c_bool),
             )
-            self.dll.Asap3IsRestartMeasurementOnErrorEnabled.restype = (
-                ctypes.c_bool
-            )
+            self.dll.Asap3IsRestartMeasurementOnErrorEnabled.restype = ctypes.c_bool
 
         # ECU online/offline
         if hasattr(self.dll, "Asap3ECUOnOffline"):
@@ -206,14 +203,10 @@ class ModuleManagement:
             If module count cannot be retrieved.
         """
         if not hasattr(self.dll, "Asap3GetModuleCount"):
-            raise CANapeModuleError(
-                "Asap3GetModuleCount not available in this DLL version"
-            )
+            raise CANapeModuleError("Asap3GetModuleCount not available in this DLL version")
 
         count = ctypes.c_ulong()
-        result = self.dll.Asap3GetModuleCount(
-            self.handle.handle, ctypes.byref(count)
-        )
+        result = self.dll.Asap3GetModuleCount(self.handle.handle, ctypes.byref(count))
         if not result:
             error_code = self._get_last_error()
             raise CANapeModuleError(
@@ -241,14 +234,10 @@ class ModuleManagement:
             If module name cannot be retrieved.
         """
         if not hasattr(self.dll, "Asap3GetModuleName"):
-            raise CANapeModuleError(
-                "Asap3GetModuleName not available in this DLL version"
-            )
+            raise CANapeModuleError("Asap3GetModuleName not available in this DLL version")
 
         module_name = ctypes.POINTER(ctypes.c_char_p)()
-        result = self.dll.Asap3GetModuleName(
-            self.handle.handle, module, ctypes.byref(module_name)
-        )
+        result = self.dll.Asap3GetModuleName(self.handle.handle, module, ctypes.byref(module_name))
         if result and module_name:
             return module_name.contents.value.decode("UTF-8")
         return None
@@ -272,16 +261,12 @@ class ModuleManagement:
             If module handle cannot be retrieved.
         """
         if not hasattr(self.dll, "Asap3GetModuleHandle"):
-            raise CANapeModuleError(
-                "Asap3GetModuleHandle not available in this DLL version"
-            )
+            raise CANapeModuleError("Asap3GetModuleHandle not available in this DLL version")
 
         c_module_name = ctypes.c_char_p(module_name.encode("UTF-8"))
         module = TModulHdl()
 
-        result = self.dll.Asap3GetModuleHandle(
-            self.handle.handle, c_module_name, ctypes.byref(module)
-        )
+        result = self.dll.Asap3GetModuleHandle(self.handle.handle, c_module_name, ctypes.byref(module))
         if not result:
             error_code = self._get_last_error()
             raise CANapeModuleError(
@@ -309,9 +294,7 @@ class ModuleManagement:
             If module cannot be released.
         """
         if not hasattr(self.dll, "Asap3ReleaseModule"):
-            raise CANapeModuleError(
-                "Asap3ReleaseModule not available in this DLL version"
-            )
+            raise CANapeModuleError("Asap3ReleaseModule not available in this DLL version")
 
         result = self.dll.Asap3ReleaseModule(self.handle.handle, module)
         if not result:
@@ -322,9 +305,7 @@ class ModuleManagement:
             )
         return result
 
-    def Asap3GetCommunicationType(
-        self, module: TModulHdl
-    ) -> Optional[str]:
+    def Asap3GetCommunicationType(self, module: TModulHdl) -> Optional[str]:
         """Get current communication type (e.g., "CAN").
 
         Parameters
@@ -343,14 +324,10 @@ class ModuleManagement:
             If communication type cannot be retrieved.
         """
         if not hasattr(self.dll, "Asap3GetCommunicationType"):
-            raise CANapeModuleError(
-                "Asap3GetCommunicationType not available in this DLL version"
-            )
+            raise CANapeModuleError("Asap3GetCommunicationType not available in this DLL version")
 
         comm_type = ctypes.POINTER(ctypes.c_char_p)()
-        result = self.dll.Asap3GetCommunicationType(
-            self.handle.handle, module, ctypes.byref(comm_type)
-        )
+        result = self.dll.Asap3GetCommunicationType(self.handle.handle, module, ctypes.byref(comm_type))
         if result and comm_type:
             return comm_type.contents.value.decode("UTF-8")
         return None
@@ -374,14 +351,10 @@ class ModuleManagement:
             If module state cannot be retrieved.
         """
         if not hasattr(self.dll, "Asap3IsModuleActive"):
-            raise CANapeModuleError(
-                "Asap3IsModuleActive not available in this DLL version"
-            )
+            raise CANapeModuleError("Asap3IsModuleActive not available in this DLL version")
 
         activate = ctypes.c_bool()
-        result = self.dll.Asap3IsModuleActive(
-            self.handle.handle, module, ctypes.byref(activate)
-        )
+        result = self.dll.Asap3IsModuleActive(self.handle.handle, module, ctypes.byref(activate))
         if not result:
             error_code = self._get_last_error()
             raise CANapeModuleError(
@@ -390,9 +363,7 @@ class ModuleManagement:
             )
         return activate.value
 
-    def Asap3ModuleActivation(
-        self, module: TModulHdl, activate: bool
-    ) -> bool:
+    def Asap3ModuleActivation(self, module: TModulHdl, activate: bool) -> bool:
         """Switch module activation state (activated/deactivated).
 
         Parameters
@@ -413,14 +384,10 @@ class ModuleManagement:
             If module activation cannot be changed.
         """
         if not hasattr(self.dll, "Asap3ModuleActivation"):
-            raise CANapeModuleError(
-                "Asap3ModuleActivation not available in this DLL version"
-            )
+            raise CANapeModuleError("Asap3ModuleActivation not available in this DLL version")
 
         c_activate = ctypes.c_bool(activate)
-        result = self.dll.Asap3ModuleActivation(
-            self.handle.handle, module, c_activate
-        )
+        result = self.dll.Asap3ModuleActivation(self.handle.handle, module, c_activate)
         if not result:
             error_code = self._get_last_error()
             raise CANapeModuleError(
@@ -429,9 +396,7 @@ class ModuleManagement:
             )
         return result
 
-    def Asap3SwitchToMemoryPage(
-        self, module: TModulHdl, mode: int
-    ) -> bool:
+    def Asap3SwitchToMemoryPage(self, module: TModulHdl, mode: int) -> bool:
         """Switch the module's cal page between RAM and ROM.
 
         Parameters
@@ -452,14 +417,10 @@ class ModuleManagement:
             If memory page cannot be switched.
         """
         if not hasattr(self.dll, "Asap3SwitchToMemoryPage"):
-            raise CANapeModuleError(
-                "Asap3SwitchToMemoryPage not available in this DLL version"
-            )
+            raise CANapeModuleError("Asap3SwitchToMemoryPage not available in this DLL version")
 
         c_mode = ctypes.c_int(mode)
-        result = self.dll.Asap3SwitchToMemoryPage(
-            self.handle.handle, module, c_mode
-        )
+        result = self.dll.Asap3SwitchToMemoryPage(self.handle.handle, module, c_mode)
         if not result:
             error_code = self._get_last_error()
             raise CANapeModuleError(
@@ -487,14 +448,10 @@ class ModuleManagement:
             If memory page cannot be retrieved.
         """
         if not hasattr(self.dll, "Asap3GetMemoryPage"):
-            raise CANapeModuleError(
-                "Asap3GetMemoryPage not available in this DLL version"
-            )
+            raise CANapeModuleError("Asap3GetMemoryPage not available in this DLL version")
 
         mode = ctypes.c_int()
-        result = self.dll.Asap3GetMemoryPage(
-            self.handle.handle, module, ctypes.byref(mode)
-        )
+        result = self.dll.Asap3GetMemoryPage(self.handle.handle, module, ctypes.byref(mode))
         if not result:
             error_code = self._get_last_error()
             raise CANapeModuleError(
@@ -522,14 +479,10 @@ class ModuleManagement:
             If resume mode support cannot be determined.
         """
         if not hasattr(self.dll, "Asap3HasResumeMode"):
-            raise CANapeModuleError(
-                "Asap3HasResumeMode not available in this DLL version"
-            )
+            raise CANapeModuleError("Asap3HasResumeMode not available in this DLL version")
 
         possible = ctypes.c_bool()
-        result = self.dll.Asap3HasResumeMode(
-            self.handle.handle, module, ctypes.byref(possible)
-        )
+        result = self.dll.Asap3HasResumeMode(self.handle.handle, module, ctypes.byref(possible))
         if not result:
             error_code = self._get_last_error()
             raise CANapeModuleError(
@@ -557,9 +510,7 @@ class ModuleManagement:
             If resume mode cannot be enabled.
         """
         if not hasattr(self.dll, "Asap3SetResumeMode"):
-            raise CANapeModuleError(
-                "Asap3SetResumeMode not available in this DLL version"
-            )
+            raise CANapeModuleError("Asap3SetResumeMode not available in this DLL version")
 
         result = self.dll.Asap3SetResumeMode(self.handle.handle, module)
         if not result:
@@ -589,14 +540,10 @@ class ModuleManagement:
             If resume mode state cannot be determined.
         """
         if not hasattr(self.dll, "Asap3IsResumeModeActive"):
-            raise CANapeModuleError(
-                "Asap3IsResumeModeActive not available in this DLL version"
-            )
+            raise CANapeModuleError("Asap3IsResumeModeActive not available in this DLL version")
 
         enabled = ctypes.c_bool()
-        result = self.dll.Asap3IsResumeModeActive(
-            self.handle.handle, module, ctypes.byref(enabled)
-        )
+        result = self.dll.Asap3IsResumeModeActive(self.handle.handle, module, ctypes.byref(enabled))
         if not result:
             error_code = self._get_last_error()
             raise CANapeModuleError(
@@ -624,9 +571,7 @@ class ModuleManagement:
             If resume mode cannot be cleared.
         """
         if not hasattr(self.dll, "Asap3ClearResumeMode"):
-            raise CANapeModuleError(
-                "Asap3ClearResumeMode not available in this DLL version"
-            )
+            raise CANapeModuleError("Asap3ClearResumeMode not available in this DLL version")
 
         result = self.dll.Asap3ClearResumeMode(self.handle.handle, module)
         if not result:
@@ -637,9 +582,7 @@ class ModuleManagement:
             )
         return result
 
-    def Asap3RestartMeasurementOnError(
-        self, module: TModulHdl, restart: bool
-    ) -> bool:
+    def Asap3RestartMeasurementOnError(self, module: TModulHdl, restart: bool) -> bool:
         """Enable or disable the option "Restart measurement on Error".
 
         Parameters
@@ -660,14 +603,10 @@ class ModuleManagement:
             If restart option cannot be set.
         """
         if not hasattr(self.dll, "Asap3RestartMeasurementOnError"):
-            raise CANapeModuleError(
-                "Asap3RestartMeasurementOnError not available in this DLL version"
-            )
+            raise CANapeModuleError("Asap3RestartMeasurementOnError not available in this DLL version")
 
         c_restart = ctypes.c_bool(restart)
-        result = self.dll.Asap3RestartMeasurementOnError(
-            self.handle.handle, module, c_restart
-        )
+        result = self.dll.Asap3RestartMeasurementOnError(self.handle.handle, module, c_restart)
         if not result:
             error_code = self._get_last_error()
             raise CANapeModuleError(
@@ -676,9 +615,7 @@ class ModuleManagement:
             )
         return result
 
-    def Asap3IsRestartMeasurementOnErrorEnabled(
-        self, module: TModulHdl
-    ) -> bool:
+    def Asap3IsRestartMeasurementOnErrorEnabled(self, module: TModulHdl) -> bool:
         """Get the "Restart measurement on Error" option state.
 
         Parameters
@@ -697,14 +634,10 @@ class ModuleManagement:
             If restart option state cannot be retrieved.
         """
         if not hasattr(self.dll, "Asap3IsRestartMeasurementOnErrorEnabled"):
-            raise CANapeModuleError(
-                "Asap3IsRestartMeasurementOnErrorEnabled not available in this DLL version"
-            )
+            raise CANapeModuleError("Asap3IsRestartMeasurementOnErrorEnabled not available in this DLL version")
 
         restart = ctypes.c_bool()
-        result = self.dll.Asap3IsRestartMeasurementOnErrorEnabled(
-            self.handle.handle, module, ctypes.byref(restart)
-        )
+        result = self.dll.Asap3IsRestartMeasurementOnErrorEnabled(self.handle.handle, module, ctypes.byref(restart))
         if not result:
             error_code = self._get_last_error()
             raise CANapeModuleError(
@@ -713,9 +646,7 @@ class ModuleManagement:
             )
         return restart.value
 
-    def Asap3ECUOnOffline(
-        self, module: TModulHdl, state: int, download: bool = False
-    ) -> bool:
+    def Asap3ECUOnOffline(self, module: TModulHdl, state: int, download: bool = False) -> bool:
         """Switch an ECU from online to offline and vice versa.
 
         Parameters
@@ -739,15 +670,11 @@ class ModuleManagement:
             If ECU state cannot be changed.
         """
         if not hasattr(self.dll, "Asap3ECUOnOffline"):
-            raise CANapeModuleError(
-                "Asap3ECUOnOffline not available in this DLL version"
-            )
+            raise CANapeModuleError("Asap3ECUOnOffline not available in this DLL version")
 
         c_state = ctypes.c_int(state)
         c_download = ctypes.c_bool(download)
-        result = self.dll.Asap3ECUOnOffline(
-            self.handle.handle, module, c_state, c_download
-        )
+        result = self.dll.Asap3ECUOnOffline(self.handle.handle, module, c_state, c_download)
         if not result:
             error_code = self._get_last_error()
             raise CANapeModuleError(
@@ -775,14 +702,10 @@ class ModuleManagement:
             If ECU state cannot be determined.
         """
         if not hasattr(self.dll, "Asap3IsECUOnline"):
-            raise CANapeModuleError(
-                "Asap3IsECUOnline not available in this DLL version"
-            )
+            raise CANapeModuleError("Asap3IsECUOnline not available in this DLL version")
 
         state = ctypes.c_int()
-        result = self.dll.Asap3IsECUOnline(
-            self.handle.handle, module, ctypes.byref(state)
-        )
+        result = self.dll.Asap3IsECUOnline(self.handle.handle, module, ctypes.byref(state))
         if not result:
             error_code = self._get_last_error()
             raise CANapeModuleError(
@@ -810,14 +733,10 @@ class ModuleManagement:
             If driver type cannot be retrieved.
         """
         if not hasattr(self.dll, "Asap3GetEcuDriverType"):
-            raise CANapeModuleError(
-                "Asap3GetEcuDriverType not available in this DLL version"
-            )
+            raise CANapeModuleError("Asap3GetEcuDriverType not available in this DLL version")
 
         driver_type = ctypes.c_int()
-        result = self.dll.Asap3GetEcuDriverType(
-            self.handle.handle, module, ctypes.byref(driver_type)
-        )
+        result = self.dll.Asap3GetEcuDriverType(self.handle.handle, module, ctypes.byref(driver_type))
         if not result:
             error_code = self._get_last_error()
             raise CANapeModuleError(
@@ -837,4 +756,3 @@ class ModuleManagement:
         if hasattr(self.dll, "Asap3GetLastError"):
             return self.dll.Asap3GetLastError(self.handle.handle)
         return 0
-

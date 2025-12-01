@@ -5,9 +5,7 @@ def generate_fancy_enum_factory(states, name):
     class FancyEnum(ctypes.c_int):
         def __init__(self, value):
             self.states = states
-            assert value in self.states, Exception(
-                "Unknown State"
-            )
+            assert value in self.states, Exception("Unknown State")
             self.value = value
 
         def __eq__(self, other):
@@ -51,9 +49,7 @@ TScriptStatus = generate_fancy_enum_factory(
     "TScriptStatus",
 )
 
-e_RamMode = generate_fancy_enum_factory(
-    {0: "e_TR_MODE_RAM", 1: "e_TR_MODE_ROM"}, "e_RamMode"
-)
+e_RamMode = generate_fancy_enum_factory({0: "e_TR_MODE_RAM", 1: "e_TR_MODE_ROM"}, "e_RamMode")
 
 TRecorderType = generate_fancy_enum_factory(
     {

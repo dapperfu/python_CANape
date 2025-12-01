@@ -73,9 +73,7 @@ class ASAP3Project:
         size = ctypes.c_ulong(0)
 
         # Query size
-        result = self.dll.Asap3GetProjectDirectory(
-            self.handle.handle, None, ctypes.byref(size)
-        )
+        result = self.dll.Asap3GetProjectDirectory(self.handle.handle, None, ctypes.byref(size))
         if not result:
             error_code = self._get_last_error()
             raise CANapeError(
@@ -86,9 +84,7 @@ class ASAP3Project:
         # Allocate buffer and get directory
         buffer_size = size.value + 1  # Add 1 for null terminator
         directory = ctypes.create_string_buffer(buffer_size)
-        result = self.dll.Asap3GetProjectDirectory(
-            self.handle.handle, directory, ctypes.byref(size)
-        )
+        result = self.dll.Asap3GetProjectDirectory(self.handle.handle, directory, ctypes.byref(size))
         if result:
             return os.path.abspath(directory.value.decode("UTF-8"))
         return None
@@ -112,14 +108,10 @@ class ASAP3Project:
             If application name cannot be set.
         """
         if not hasattr(self.dll, "Asap3SetApplicationName"):
-            raise CANapeError(
-                "Asap3SetApplicationName not available in this DLL version"
-            )
+            raise CANapeError("Asap3SetApplicationName not available in this DLL version")
 
         c_app_name = ctypes.c_char_p(app_name.encode("UTF-8"))
-        result = self.dll.Asap3SetApplicationName(
-            self.handle.handle, c_app_name
-        )
+        result = self.dll.Asap3SetApplicationName(self.handle.handle, c_app_name)
         if not result:
             error_code = self._get_last_error()
             raise CANapeError(
@@ -142,17 +134,13 @@ class ASAP3Project:
             If application name cannot be retrieved.
         """
         if not hasattr(self.dll, "Asap3GetApplicationName"):
-            raise CANapeError(
-                "Asap3GetApplicationName not available in this DLL version"
-            )
+            raise CANapeError("Asap3GetApplicationName not available in this DLL version")
 
         # First call to get required buffer size (pass NULL for name)
         size = ctypes.c_ulong(0)
 
         # Query size
-        result = self.dll.Asap3GetApplicationName(
-            self.handle.handle, None, ctypes.byref(size)
-        )
+        result = self.dll.Asap3GetApplicationName(self.handle.handle, None, ctypes.byref(size))
         if not result:
             error_code = self._get_last_error()
             raise CANapeError(
@@ -163,9 +151,7 @@ class ASAP3Project:
         # Allocate buffer and get name
         buffer_size = size.value + 1  # Add 1 for null terminator
         name = ctypes.create_string_buffer(buffer_size)
-        result = self.dll.Asap3GetApplicationName(
-            self.handle.handle, name, ctypes.byref(size)
-        )
+        result = self.dll.Asap3GetApplicationName(self.handle.handle, name, ctypes.byref(size))
         if result:
             return name.value.decode("UTF-8")
         return None
@@ -181,4 +167,3 @@ class ASAP3Project:
         if hasattr(self.dll, "Asap3GetLastError"):
             return self.dll.Asap3GetLastError(self.handle.handle)
         return 0
-

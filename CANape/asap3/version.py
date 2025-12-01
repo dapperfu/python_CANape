@@ -80,9 +80,7 @@ class ASAP3Version:
             If version retrieval fails.
         """
         if not hasattr(self.dll, "Asap3GetApplicationVersion"):
-            raise CANapeError(
-                "Asap3GetApplicationVersion not available in this DLL version"
-            )
+            raise CANapeError("Asap3GetApplicationVersion not available in this DLL version")
 
         # Assign types if not already assigned
         if not hasattr(self.dll.Asap3GetApplicationVersion, "argtypes"):
@@ -93,10 +91,7 @@ class ASAP3Version:
             self.dll.Asap3GetApplicationVersion.restype = ctypes.c_bool
 
         version = Appversion()
-        result = self.dll.Asap3GetApplicationVersion(
-            self.handle.handle, ctypes.byref(version)
-        )
+        result = self.dll.Asap3GetApplicationVersion(self.handle.handle, ctypes.byref(version))
         if result:
             return version
         return None
-

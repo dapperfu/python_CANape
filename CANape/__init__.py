@@ -16,13 +16,12 @@ Example
 
 from typing import Any, Optional
 
-from .core.dll_loader import load_dll
-from .core.handle import Handle
-from .core.type_assignments import assign_basic_dll_types
-
 # Import all sub-modules
 from .asap3 import error_handling, initialization, project, version
 from .calibration import address_access, object_info, read_write
+from .core.dll_loader import load_dll
+from .core.handle import Handle
+from .core.type_assignments import assign_basic_dll_types
 from .module import creation, database, management
 
 __all__ = ["CANape"]

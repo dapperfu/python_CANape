@@ -15,7 +15,6 @@ from ..core.type_assignments import (
     assign_exit_functions,
     assign_init_functions,
 )
-from ..core.types import TAsap3Hdl
 
 
 class ASAP3Initialization:
@@ -48,9 +47,7 @@ class ASAP3Initialization:
         assign_init_functions(self.dll)
         assign_exit_functions(self.dll)
 
-    def Asap3SetTCPOptions(
-        self, ip_address: str, port_number: int
-    ) -> bool:
+    def Asap3SetTCPOptions(self, ip_address: str, port_number: int) -> bool:
         """Configure ASAP3 TCP connection.
 
         This function must be called before any of the Asap3Init calls.
@@ -76,9 +73,7 @@ class ASAP3Initialization:
             If TCP options cannot be set.
         """
         if not hasattr(self.dll, "Asap3SetTCPOptions"):
-            raise CANapeInitializationError(
-                "Asap3SetTCPOptions not available in this DLL version"
-            )
+            raise CANapeInitializationError("Asap3SetTCPOptions not available in this DLL version")
 
         c_ip_address = ctypes.c_char_p(ip_address.encode("UTF-8"))
         c_port_number = ctypes.c_ulong(port_number)
@@ -505,9 +500,7 @@ class ASAP3Initialization:
             app_id = TApplicationID()
             app_id.tApplicationType = application_type
             if application_path:
-                app_id.tApplicationPath = ctypes.c_char_p(
-                    application_path.encode("UTF-8")
-                )
+                app_id.tApplicationPath = ctypes.c_char_p(application_path.encode("UTF-8"))
 
         c_app_id = ctypes.POINTER(TApplicationID)(app_id) if app_id else None
 
@@ -597,4 +590,3 @@ class ASAP3Initialization:
         if hasattr(self.dll, "Asap3GetLastError"):
             return self.dll.Asap3GetLastError(self.handle.handle)
         return 0
-

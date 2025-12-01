@@ -4,9 +4,8 @@ This module provides functions for creating and attaching modules to CANape.
 """
 
 import ctypes
-from typing import Any, Optional
+from typing import Any
 
-from ..core.enums import tDriverType
 from ..core.exceptions import CANapeModuleError
 from ..core.handle import Handle
 from ..core.types import TModulHdl
@@ -124,9 +123,7 @@ class ModuleCreation:
             )
             self.dll.Asap3CreateModuleSec.restype = ctypes.c_bool
 
-    def Asap3AttachAsap2(
-        self, asap2_filename: str, can_channel: int
-    ) -> TModulHdl:
+    def Asap3AttachAsap2(self, asap2_filename: str, can_channel: int) -> TModulHdl:
         """Create a new module/device and attach an ASAP2-description file.
 
         Parameters
@@ -147,9 +144,7 @@ class ModuleCreation:
             If module creation fails.
         """
         if not hasattr(self.dll, "Asap3AttachAsap2"):
-            raise CANapeModuleError(
-                "Asap3AttachAsap2 not available in this DLL version"
-            )
+            raise CANapeModuleError("Asap3AttachAsap2 not available in this DLL version")
 
         c_asap2_filename = ctypes.c_char_p(asap2_filename.encode("UTF-8"))
         c_can_channel = ctypes.c_short(can_channel)
@@ -202,14 +197,10 @@ class ModuleCreation:
             If module creation fails.
         """
         if not hasattr(self.dll, "Asap3CreateModule"):
-            raise CANapeModuleError(
-                "Asap3CreateModule not available in this DLL version"
-            )
+            raise CANapeModuleError("Asap3CreateModule not available in this DLL version")
 
         c_module_name = ctypes.c_char_p(module_name.encode("UTF-8"))
-        c_database_filename = ctypes.c_char_p(
-            database_filename.encode("UTF-8")
-        )
+        c_database_filename = ctypes.c_char_p(database_filename.encode("UTF-8"))
         c_driver_type = ctypes.c_short(driver_type)
         c_channel_no = ctypes.c_short(channel_no)
         module = TModulHdl()
@@ -269,14 +260,10 @@ class ModuleCreation:
             If module creation fails.
         """
         if not hasattr(self.dll, "Asap3CreateModule2"):
-            raise CANapeModuleError(
-                "Asap3CreateModule2 not available in this DLL version"
-            )
+            raise CANapeModuleError("Asap3CreateModule2 not available in this DLL version")
 
         c_module_name = ctypes.c_char_p(module_name.encode("UTF-8"))
-        c_database_filename = ctypes.c_char_p(
-            database_filename.encode("UTF-8")
-        )
+        c_database_filename = ctypes.c_char_p(database_filename.encode("UTF-8"))
         c_driver_type = ctypes.c_short(driver_type)
         c_channel_no = ctypes.c_short(channel_no)
         c_go_online = ctypes.c_bool(go_online)
@@ -338,14 +325,10 @@ class ModuleCreation:
             If module creation fails.
         """
         if not hasattr(self.dll, "Asap3CreateModule3"):
-            raise CANapeModuleError(
-                "Asap3CreateModule3 not available in this DLL version"
-            )
+            raise CANapeModuleError("Asap3CreateModule3 not available in this DLL version")
 
         c_module_name = ctypes.c_char_p(module_name.encode("UTF-8"))
-        c_database_filename = ctypes.c_char_p(
-            database_filename.encode("UTF-8")
-        )
+        c_database_filename = ctypes.c_char_p(database_filename.encode("UTF-8"))
         c_driver_type = ctypes.c_short(driver_type)
         c_channel_no = ctypes.c_short(channel_no)
         c_go_online = ctypes.c_bool(go_online)
@@ -412,14 +395,10 @@ class ModuleCreation:
             If module creation fails.
         """
         if not hasattr(self.dll, "Asap3CreateModule4"):
-            raise CANapeModuleError(
-                "Asap3CreateModule4 not available in this DLL version"
-            )
+            raise CANapeModuleError("Asap3CreateModule4 not available in this DLL version")
 
         c_module_name = ctypes.c_char_p(module_name.encode("UTF-8"))
-        c_database_filename = ctypes.c_char_p(
-            database_filename.encode("UTF-8")
-        )
+        c_database_filename = ctypes.c_char_p(database_filename.encode("UTF-8"))
         c_driver_type = ctypes.c_short(driver_type)
         c_channel_no = ctypes.c_short(channel_no)
         c_interface_name = ctypes.c_char_p(interface_name.encode("UTF-8"))
@@ -495,14 +474,10 @@ class ModuleCreation:
             If module creation fails.
         """
         if not hasattr(self.dll, "Asap3CreateModuleSec"):
-            raise CANapeModuleError(
-                "Asap3CreateModuleSec not available in this DLL version"
-            )
+            raise CANapeModuleError("Asap3CreateModuleSec not available in this DLL version")
 
         c_module_name = ctypes.c_char_p(module_name.encode("UTF-8"))
-        c_database_filename = ctypes.c_char_p(
-            database_filename.encode("UTF-8")
-        )
+        c_database_filename = ctypes.c_char_p(database_filename.encode("UTF-8"))
         c_driver_type = ctypes.c_short(driver_type)
         c_channel_no = ctypes.c_short(channel_no)
         c_interface_name = ctypes.c_char_p(interface_name.encode("UTF-8"))
@@ -545,4 +520,3 @@ class ModuleCreation:
         if hasattr(self.dll, "Asap3GetLastError"):
             return self.dll.Asap3GetLastError(self.handle.handle)
         return 0
-

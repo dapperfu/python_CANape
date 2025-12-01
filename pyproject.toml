@@ -130,7 +130,7 @@ markers = [
 ]
 
 [tool.black]
-line-length = 100
+line-length = 120
 target-version = ["py38", "py39", "py310", "py311"]
 include = '\.pyi?$'
 extend-exclude = '''
@@ -150,8 +150,10 @@ extend-exclude = '''
 '''
 
 [tool.ruff]
-line-length = 100
+line-length = 120
 target-version = "py38"
+
+[tool.ruff.lint]
 select = [
     "E",   # pycodestyle errors
     "W",   # pycodestyle warnings
@@ -162,18 +164,22 @@ select = [
     "UP",  # pyupgrade
 ]
 ignore = [
-    "E501",  # line too long (handled by black)
+    "E501",  # line too long (handled by formatter)
     "B008",  # do not perform function calls in argument defaults
     "C901",  # too complex
+    "F403",  # star imports (needed for ctypes structures)
+    "F405",  # may be undefined from star imports (acceptable for ctypes)
 ]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]  # unused imports
-"versioneer.py" = ["E501", "F401", "F403"]  # versioneer has its own style
+"versioneer.py" = ["E501", "F401", "F403", "UP031", "UP036", "B007"]  # versioneer has its own style
+"_version.py" = ["E501", "F401", "F403", "UP031", "UP036", "B007"]  # versioneer generated file
+"core/structs.py" = ["F403", "F405"]  # star imports needed for ctypes compatibility
 
 [tool.isort]
 profile = "black"
-line_length = 100
+line_length = 120
 known_first_party = ["CANape", "CANapAPI"]
 
 [tool.coverage.run]

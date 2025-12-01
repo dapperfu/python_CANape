@@ -223,4 +223,3 @@ def assign_basic_dll_types(dll: Any) -> Any:
     dll = assign_interactive_mode_functions(dll)
     dll = assign_project_functions(dll)
     return dll
-

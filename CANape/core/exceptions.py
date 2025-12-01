@@ -120,4 +120,3 @@ class CANapeVersionError(CANapeError):
     """Version compatibility error."""
 
     pass
-

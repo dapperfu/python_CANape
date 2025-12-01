@@ -6,7 +6,6 @@ This module provides functions for getting information about calibration objects
 import ctypes
 from typing import Any, Optional, Tuple
 
-from ..core.enums import TValueType
 from ..core.exceptions import CANapeCalibrationError
 from ..core.handle import Handle
 from ..core.structs import TLayoutCoeffs
@@ -74,9 +73,7 @@ class CalibrationObjectInfo:
             )
             self.dll.Asap3CalibrationObjectRecordInfo.restype = ctypes.c_bool
 
-    def Asap3CalibrationObjectInfo(
-        self, module: TModulHdl, calibration_object_name: str
-    ) -> Optional[Tuple[int, int]]:
+    def Asap3CalibrationObjectInfo(self, module: TModulHdl, calibration_object_name: str) -> Optional[Tuple[int, int]]:
         """Get dimensions of a calibration object.
 
         Parameters
@@ -97,13 +94,9 @@ class CalibrationObjectInfo:
             If object info cannot be retrieved.
         """
         if not hasattr(self.dll, "Asap3CalibrationObjectInfo"):
-            raise CANapeCalibrationError(
-                "Asap3CalibrationObjectInfo not available in this DLL version"
-            )
+            raise CANapeCalibrationError("Asap3CalibrationObjectInfo not available in this DLL version")
 
-        c_object_name = ctypes.c_char_p(
-            calibration_object_name.encode("UTF-8")
-        )
+        c_object_name = ctypes.c_char_p(calibration_object_name.encode("UTF-8"))
         x_dim = ctypes.c_short()
         y_dim = ctypes.c_short()
 
@@ -141,13 +134,9 @@ class CalibrationObjectInfo:
             If object info cannot be retrieved.
         """
         if not hasattr(self.dll, "Asap3CalibrationObjectInfoEx"):
-            raise CANapeCalibrationError(
-                "Asap3CalibrationObjectInfoEx not available in this DLL version"
-            )
+            raise CANapeCalibrationError("Asap3CalibrationObjectInfoEx not available in this DLL version")
 
-        c_object_name = ctypes.c_char_p(
-            calibration_object_name.encode("UTF-8")
-        )
+        c_object_name = ctypes.c_char_p(calibration_object_name.encode("UTF-8"))
         x_dim = ctypes.c_short()
         y_dim = ctypes.c_short()
         obj_type = ctypes.c_int()
@@ -187,13 +176,9 @@ class CalibrationObjectInfo:
             If record info cannot be retrieved.
         """
         if not hasattr(self.dll, "Asap3CalibrationObjectRecordInfo"):
-            raise CANapeCalibrationError(
-                "Asap3CalibrationObjectRecordInfo not available in this DLL version"
-            )
+            raise CANapeCalibrationError("Asap3CalibrationObjectRecordInfo not available in this DLL version")
 
-        c_object_name = ctypes.c_char_p(
-            calibration_object_name.encode("UTF-8")
-        )
+        c_object_name = ctypes.c_char_p(calibration_object_name.encode("UTF-8"))
         coeffs = TLayoutCoeffs()
         x_dim = ctypes.c_short()
         y_dim = ctypes.c_short()
@@ -221,4 +206,3 @@ class CalibrationObjectInfo:
         if hasattr(self.dll, "Asap3GetLastError"):
             return self.dll.Asap3GetLastError(self.handle.handle)
         return 0
-

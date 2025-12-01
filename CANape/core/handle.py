@@ -66,4 +66,3 @@ class Handle:
     def __bool__(self) -> bool:
         """Check if handle is valid."""
         return self.valid
-

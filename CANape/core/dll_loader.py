@@ -117,4 +117,3 @@ def load_dll(dll_path: Optional[str] = None) -> ctypes.WinDLL:
         return dll
     except OSError as e:
         raise CANapeDLLError(f"Failed to load DLL: {e}") from e
-

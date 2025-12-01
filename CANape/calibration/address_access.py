@@ -95,9 +95,7 @@ class CalibrationAddressAccess:
             If read operation fails.
         """
         if not hasattr(self.dll, "Asap3ReadByAddress"):
-            raise CANapeCalibrationError(
-                "Asap3ReadByAddress not available in this DLL version"
-            )
+            raise CANapeCalibrationError("Asap3ReadByAddress not available in this DLL version")
 
         c_address = ctypes.c_ulong(address)
         c_address_ext = ctypes.c_ubyte(address_ext)
@@ -152,9 +150,7 @@ class CalibrationAddressAccess:
             If write operation fails.
         """
         if not hasattr(self.dll, "Asap3WriteByAddress"):
-            raise CANapeCalibrationError(
-                "Asap3WriteByAddress not available in this DLL version"
-            )
+            raise CANapeCalibrationError("Asap3WriteByAddress not available in this DLL version")
 
         c_address = ctypes.c_ulong(address)
         c_address_ext = ctypes.c_ubyte(address_ext)
@@ -188,4 +184,3 @@ class CalibrationAddressAccess:
         if hasattr(self.dll, "Asap3GetLastError"):
             return self.dll.Asap3GetLastError(self.handle.handle)
         return 0
-

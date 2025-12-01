@@ -9,9 +9,9 @@ from typing import TYPE_CHECKING
 from .types import *
 
 if TYPE_CHECKING:
-    from .enums import TApplicationType
+    pass
 else:
-    from .enums import TApplicationType
+    pass
 
 
 class TApplicationID(ctypes.Structure):
@@ -36,19 +36,24 @@ class PValues(ctypes.Union):
         ("FVal", ctypes.c_float),
         ("DVal", ctypes.c_double),
     ]
+
+
 class DiagNumericParamater(ctypes.Structure):
     __slots__ = [
         "DiagNumeric",
         "Values",
     ]
 
+
 DiagNumericParamater._fields_ = [
     ("DiagNumeric", ctypes.c_int),
     ("Values", PValues),
 ]
 
+
 class DiagNotificationStruct(ctypes.Structure):
     """Structure which is a parameter  of the callback function FNCDIAGNOFIFICATION."""
+
     _fields_ = [
         ("DiagHandle", TAsap3DiagHdl),
         ("DiagState", ctypes.c_int),
@@ -71,9 +76,7 @@ class MeasurementListEntries(ctypes.Structure):
         ("ItemCount", ctypes.c_uint),
         (
             "Entries",
-            ctypes.POINTER(
-                ctypes.POINTER(MeasurementListEntry)
-            ),
+            ctypes.POINTER(ctypes.POINTER(MeasurementListEntry)),
         ),
     ]
 
@@ -190,19 +193,13 @@ class version_t(ctypes.Structure):
             return str(other) == str(self)
         if isinstance(other, str):
             return str(other) == str(self)
-        raise Exception(
-            f"Unsupported class comparison {type(other)}"
-        )
+        raise Exception(f"Unsupported class comparison {type(other)}")
 
     def __repr__(self):
         return f"API_VERSION<{self.dllMainVersion}.{self.dllSubVersion}.{self.dllRelease}>"
 
     def __str__(self):
-        return "{}.{}.{}".format(
-            self.dllMainVersion,
-            self.dllSubVersion,
-            self.dllRelease,
-        )
+        return f"{self.dllMainVersion}.{self.dllSubVersion}.{self.dllRelease}"
 
 
 class Appversion(ctypes.Structure):
@@ -210,7 +207,7 @@ class Appversion(ctypes.Structure):
         ("MainVersion", ctypes.c_int),
         ("SubVersion", ctypes.c_int),
         ("ServicePack", ctypes.c_int),
-        ("Application", ctypes.c_char*30),
+        ("Application", ctypes.c_char * 30),
     ]
 
 

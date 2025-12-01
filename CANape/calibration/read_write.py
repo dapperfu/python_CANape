@@ -5,16 +5,25 @@ using record layout information from ASAP2.
 """
 
 import ctypes
-from typing import Any, Optional
+from typing import TYPE_CHECKING, Any, Optional
 
-from ..core.enums import TFormat, TObjectType
 from ..core.exceptions import CANapeCalibrationError
 from ..core.handle import Handle
+from ..core.types import TModulHdl
+
 # Note: TCalibrationObjectValue and TCalibrationObjectValueEx are complex unions
 # that need to be properly defined. Using ctypes.Structure as placeholder.
 # TODO: Implement proper union structures matching CANapAPI.h definitions
-from ..core.structs import TCalibrationObjectValueEx2
-from ..core.types import TModulHdl
+if TYPE_CHECKING:
+    TCalibrationObjectValue = Any
+    TCalibrationObjectValueEx = Any
+else:
+    # Placeholder structures - these are actually complex unions in the C API
+    class TCalibrationObjectValue(ctypes.Structure):
+        _fields_ = [("type", ctypes.c_int)]
+
+    class TCalibrationObjectValueEx(ctypes.Structure):
+        _fields_ = [("type", ctypes.c_int)]
 
 
 class CalibrationReadWrite:
@@ -135,13 +144,9 @@ class CalibrationReadWrite:
             If read operation fails.
         """
         if not hasattr(self.dll, "Asap3ReadCalibrationObject"):
-            raise CANapeCalibrationError(
-                "Asap3ReadCalibrationObject not available in this DLL version"
-            )
+            raise CANapeCalibrationError("Asap3ReadCalibrationObject not available in this DLL version")
 
-        c_object_name = ctypes.c_char_p(
-            calibration_object_name.encode("UTF-8")
-        )
+        c_object_name = ctypes.c_char_p(calibration_object_name.encode("UTF-8"))
         c_format = ctypes.c_int(format_type)
         # Note: TCalibrationObjectValue is a complex union, using placeholder
         # TODO: Implement proper union structure
@@ -194,13 +199,9 @@ class CalibrationReadWrite:
             If read operation fails.
         """
         if not hasattr(self.dll, "Asap3ReadCalibrationObject2"):
-            raise CANapeCalibrationError(
-                "Asap3ReadCalibrationObject2 not available in this DLL version"
-            )
+            raise CANapeCalibrationError("Asap3ReadCalibrationObject2 not available in this DLL version")
 
-        c_object_name = ctypes.c_char_p(
-            calibration_object_name.encode("UTF-8")
-        )
+        c_object_name = ctypes.c_char_p(calibration_object_name.encode("UTF-8"))
         c_format = ctypes.c_int(format_type)
         c_force_upload = ctypes.c_bool(force_upload)
         # Note: TCalibrationObjectValue is a complex union, using placeholder
@@ -251,13 +252,9 @@ class CalibrationReadWrite:
             If read operation fails.
         """
         if not hasattr(self.dll, "Asap3ReadCalibrationObjectEx"):
-            raise CANapeCalibrationError(
-                "Asap3ReadCalibrationObjectEx not available in this DLL version"
-            )
+            raise CANapeCalibrationError("Asap3ReadCalibrationObjectEx not available in this DLL version")
 
-        c_object_name = ctypes.c_char_p(
-            calibration_object_name.encode("UTF-8")
-        )
+        c_object_name = ctypes.c_char_p(calibration_object_name.encode("UTF-8"))
         c_format = ctypes.c_int(format_type)
         # Note: TCalibrationObjectValueEx is a complex union, using placeholder
         # TODO: Implement proper union structure
@@ -310,13 +307,9 @@ class CalibrationReadWrite:
             If write operation fails.
         """
         if not hasattr(self.dll, "Asap3WriteCalibrationObject"):
-            raise CANapeCalibrationError(
-                "Asap3WriteCalibrationObject not available in this DLL version"
-            )
+            raise CANapeCalibrationError("Asap3WriteCalibrationObject not available in this DLL version")
 
-        c_object_name = ctypes.c_char_p(
-            calibration_object_name.encode("UTF-8")
-        )
+        c_object_name = ctypes.c_char_p(calibration_object_name.encode("UTF-8"))
         c_format = ctypes.c_int(format_type)
 
         # Ensure value is a ctypes structure
@@ -369,13 +362,9 @@ class CalibrationReadWrite:
             If write operation fails.
         """
         if not hasattr(self.dll, "Asap3WriteCalibrationObjectEx"):
-            raise CANapeCalibrationError(
-                "Asap3WriteCalibrationObjectEx not available in this DLL version"
-            )
+            raise CANapeCalibrationError("Asap3WriteCalibrationObjectEx not available in this DLL version")
 
-        c_object_name = ctypes.c_char_p(
-            calibration_object_name.encode("UTF-8")
-        )
+        c_object_name = ctypes.c_char_p(calibration_object_name.encode("UTF-8"))
         c_format = ctypes.c_int(format_type)
 
         # Ensure value is a ctypes structure
@@ -397,9 +386,7 @@ class CalibrationReadWrite:
             )
         return result
 
-    def Asap3TestObject(
-        self, module: TModulHdl, object_name: str
-    ) -> Optional[int]:
+    def Asap3TestObject(self, module: TModulHdl, object_name: str) -> Optional[int]:
         """Test whether the name is a valid object of ASAP2 file.
 
         Parameters
@@ -421,9 +408,7 @@ class CalibrationReadWrite:
             If object test fails.
         """
         if not hasattr(self.dll, "Asap3TestObject"):
-            raise CANapeCalibrationError(
-                "Asap3TestObject not available in this DLL version"
-            )
+            raise CANapeCalibrationError("Asap3TestObject not available in this DLL version")
 
         c_object_name = ctypes.c_char_p(object_name.encode("UTF-8"))
         obj_type = ctypes.c_int()
@@ -449,4 +434,3 @@ class CalibrationReadWrite:
         if hasattr(self.dll, "Asap3GetLastError"):
             return self.dll.Asap3GetLastError(self.handle.handle)
         return 0
-

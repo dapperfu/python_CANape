@@ -6,7 +6,6 @@ This module provides functions for error handling and debugging.
 import ctypes
 from typing import Any, Optional
 
-from ..core.const import AEC_LAST_ERRCODE
 from ..core.exceptions import CANapeError
 from ..core.handle import Handle
 
@@ -64,9 +63,7 @@ class ASAP3ErrorHandling:
             If error retrieval fails.
         """
         if not hasattr(self.dll, "Asap3GetLastError"):
-            raise CANapeError(
-                "Asap3GetLastError not available in this DLL version"
-            )
+            raise CANapeError("Asap3GetLastError not available in this DLL version")
 
         error_code = self.dll.Asap3GetLastError(self.handle.handle)
         return error_code
@@ -90,9 +87,7 @@ class ASAP3ErrorHandling:
             If error text retrieval fails.
         """
         if not hasattr(self.dll, "Asap3ErrorText"):
-            raise CANapeError(
-                "Asap3ErrorText not available in this DLL version"
-            )
+            raise CANapeError("Asap3ErrorText not available in this DLL version")
 
         err_msg = ctypes.POINTER(ctypes.c_char_p)()
         result = self.dll.Asap3ErrorText(
@@ -120,9 +115,7 @@ class ASAP3ErrorHandling:
             If debug window cannot be opened.
         """
         if not hasattr(self.dll, "Asap3PopupDebugWindow"):
-            raise CANapeError(
-                "Asap3PopupDebugWindow not available in this DLL version"
-            )
+            raise CANapeError("Asap3PopupDebugWindow not available in this DLL version")
 
         if not hasattr(self.dll.Asap3PopupDebugWindow, "argtypes"):
             self.dll.Asap3PopupDebugWindow.argtypes = (ctypes.c_void_p,)
@@ -158,9 +151,7 @@ class ASAP3ErrorHandling:
             If debug window cannot be saved.
         """
         if not hasattr(self.dll, "Asap3SaveDebugWindow"):
-            raise CANapeError(
-                "Asap3SaveDebugWindow not available in this DLL version"
-            )
+            raise CANapeError("Asap3SaveDebugWindow not available in this DLL version")
 
         if not hasattr(self.dll.Asap3SaveDebugWindow, "argtypes"):
             self.dll.Asap3SaveDebugWindow.argtypes = (
@@ -170,9 +161,7 @@ class ASAP3ErrorHandling:
             self.dll.Asap3SaveDebugWindow.restype = ctypes.c_bool
 
         c_file_name = ctypes.c_char_p(file_name.encode("UTF-8"))
-        result = self.dll.Asap3SaveDebugWindow(
-            self.handle.handle, c_file_name
-        )
+        result = self.dll.Asap3SaveDebugWindow(self.handle.handle, c_file_name)
         if not result:
             error_code = self.Asap3GetLastError()
             raise CANapeError(
@@ -180,4 +169,3 @@ class ASAP3ErrorHandling:
                 error_code=error_code,
             )
         return result
-
